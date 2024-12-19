@@ -1,0 +1,8 @@
+{
+  "name": "add_invoice_airtable",
+  "description": "Use this when asked to add/upload new invoice records to Airtable, including the Name, Price, and Buyer.",
+  "color": "linear-gradient(rgb(20,158,228), rgb(62,60,157))",
+  "iconSrc": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/airtable.svg",
+  "schema": "[{\"id\":0,\"property\":\"name\",\"description\":\"The name of the place that the buyer purchased in. The name should be the first line in the invoice. Chinese characters can be inside the name.\",\"type\":\"string\",\"required\":true},{\"id\":1,\"property\":\"price\",\"description\":\"The price of what was purchased. The price should be right after the chinese characters for price: 總計\",\"type\":\"number\",\"required\":true},{\"id\":2,\"property\":\"buyer\",\"description\":\"The buyer id of the invoice. The buyer should be right after the chinese characters: 買方\",\"type\":\"number\",\"required\":true}]",
+  "func": "const fetch = require('node-fetch');\nconst baseId = 'REDACTED';\nconst tableId = 'REDACTED';\nconst token = 'REDACTED';\n\nconst body = {\n\t\"records\": [\n\t\t{\n\t\t\t\"fields\": {\n\t\t\t\t\"name\": $name,\n                \"price\": $price,\n                \"buyer\": $buyer\n\t\t\t}\n\t\t}\n\t]\n};\n\nconst options = {\n\tmethod: 'POST',\n\theaders: {\n\t\t'Authorization': `Bearer ${token}`,\n\t\t'Content-Type': 'application/json'\n\t},\n\tbody: JSON.stringify(body)\n};\n\nconst url = `https://api.airtable.com/v0/${baseId}/${tableId}`\n\ntry {\n\tconst response = await fetch(url, options);\n\tconst text = await response.text();\n\treturn text;\n} catch (error) {\n\tconsole.error(error);\n\treturn 'Error';\n}"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "get_data_airtable",
+  "description": "Use this tool when asked any question that deals with Bahwan Cybertek's (BCT) employee leave data, leave records, a specific person's leave records, etc. This tool retrieves data from the Employee Leave Database and will return a list of all the records. Use this list of records and their respective fields to answer the question to the best of your ability.",
+  "color": "linear-gradient(rgb(135,47,141), rgb(207,114,224))",
+  "iconSrc": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/airtable.svg",
+  "schema": "[]",
+  "func": "const fetch = require('node-fetch');\n\nconst token = 'REDACTED'; \nconst baseId = 'REDACTED'; \nconst tableId = 'REDACTED';  \nconst url = `https://api.airtable.com/v0/${baseId}/${tableId}`;\nconst fields = ['id', 'name', 'leave_type', 'start_date', 'duration'];\n\nconst options = {\n    method: 'GET',\n    headers: {\n        'Authorization': `Bearer ${token}`,\n        'Content-Type': 'application/json'\n    }\n};\n\ntry {\n    const response = await fetch(url, options);\n    const text = await response.json();\n    return text.records.map(record => ({\n        id: record.fields.id,\n        name: record.fields.name,\n        leave_type: record.fields.leave_type,\n        start_date: record.fields.start_date,\n        duration: record.fields.duration\n      }));\n} catch (error) {\n    console.error(error);\n    return 'Error';\n}"
+}
